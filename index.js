@@ -2,6 +2,7 @@ const express = require('express'); // es parecido a hacer una importancion
 require('dotenv').config();
 const { dbConnection } = require('./database/config');
 const cors = require('cors');
+const path = require('path');
 
 
 // Crear el servidor de Express
@@ -22,9 +23,12 @@ app.use( express.json() ); // hay que hacer pasar todas las peticiones a otro mi
 
 // Rutas
 app.use('/api/auth', require('./routes/auth')); // todo lo que el archivo auth (segundo argumento) va a exportar lo va a habilitar en la ruta escrita como primer argumento
-// TODO: CRUD: Eventos
 app.use('/api/events', require('./routes/events'));
 
+/** Para cualquier otra petición */
+app.get('*', ( req, res ) => {
+    res.sendFile( path.join( __dirname+'/public/index.html' ) );
+});
 
 // Escuchar peticiones
 app.listen( process.env.PORT, () => {
